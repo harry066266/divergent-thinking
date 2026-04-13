@@ -1,0 +1,38 @@
+{
+  "name": "divergent-thinking-skill",
+  "version": "1.2.0",
+  "description": "Agent skill: diverge → compare → recommend (frontend-friendly). Install SKILL.md via npx.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_ORG/mult-solutions.git",
+    "directory": "packages/divergent-thinking-skill"
+  },
+  "keywords": [
+    "agent",
+    "skill",
+    "cursor",
+    "claude",
+    "divergent-thinking",
+    "frontend"
+  ],
+  "bin": {
+    "divergent-thinking-skill": "bin/install.js",
+    "divergent-thinking": "bin/install.js"
+  },
+  "files": [
+    "bin",
+    "skill",
+    "README.md"
+  ],
+  "scripts": {
+    "sync": "node scripts/sync-skill.js",
+    "prepublishOnly": "node scripts/sync-skill.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.4.1"
+  }
+}
