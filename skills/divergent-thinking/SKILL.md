@@ -53,6 +53,34 @@ Use this structure (headings can be localized to the user’s language):
 5. **Recommendation** — Primary + **labeled “best” type**; runner-up or conditional branch; **Unknowns** + **what would change the ranking** when relevant.
 6. **Risk note** (if high-stakes or irreversible) — Scope of caution and suggestion to verify with a human expert.
 
+## Hard output contract (required)
+
+If this skill is triggered, the final answer MUST satisfy all checks below:
+
+1. Include all 6 section keys (or localized equivalents):
+   - Summary
+   - Problem & constraints
+   - Options
+   - Comparison
+   - Recommendation
+   - Risk note (or explicit "Not applicable" if low-risk domain)
+2. **Options count**:
+   - Broad/open question: 3-5 options
+   - Narrow question: >=2 options, or explicitly justify single viable option
+3. **Comparison matrix minimum columns**:
+   - At least 4 shared criteria columns for non-front-end topics
+   - At least 5 shared criteria columns for front-end topics, including at least one from:
+     runtime/bundle impact, accessibility, maintainability, migration/integration cost
+4. **Recommendation contract**:
+   - Must contain a labeled **best-type** (for example: best overall / most feasible now / lowest risk)
+   - Must contain a **fallback** (runner-up or conditional branch)
+5. **Uncertainty handling**:
+   - If key facts are missing, include Unknowns + what evidence would change ranking
+6. **No fake diversity**:
+   - Options must differ by mechanism/posture, not wording variations
+
+If any required item is missing, revise before sending.
+
 ## Installation
 
 - **Repo-local (this project):** `skills/divergent-thinking/SKILL.md` — reference from project `AGENTS.md` or Cursor rules if you want it always considered.
@@ -83,7 +111,47 @@ This skill does not require any server. To improve **grounded** comparisons, com
 
 Use **stack → (optional) design/repo/docs via MCP → diverge → matrix → recommend.** If tools are missing, state **Unknowns**.
 
+## MCP gating rules (when evidence is mandatory)
+
+Before recommending, you MUST fetch/verify evidence first (or explicitly decline certainty) when any of these are true:
+
+1. **Version-sensitive decisions**: framework/library version, API behavior, deprecation status, migration path.
+2. **Pricing/licensing claims**: paid tiers, commercial licenses, seat limits, enterprise features.
+3. **Compatibility claims**: browser support, SSR/SSG compatibility, runtime constraints, integration matrix.
+4. **Regulated/high-risk domains**: legal/compliance, financial, medical/safety implications.
+5. **Concrete benchmark claims**: performance numbers, bundle-size deltas, latency/cost claims.
+
+Execution policy:
+
+- If MCP/tools are available: gather minimum evidence and cite source context in comparison/recommendation.
+- If MCP/tools are not available: do not present strong certainty; downgrade to assumptions + Unknowns and state what to verify next.
+
 Full rationale: `openspec/changes/divergent-thinking-skill/proposal.md` (*Complementary public skills & MCPs*, *Front-end scenarios & complementary tools*).
+
+## Compact mode (low-latency template)
+
+Use this mode when user asks for "brief/short/quick", or context is simple and speed matters.
+
+Output format:
+
+1. **One-line summary**
+2. **2-3 options max** (each one line)
+3. **Mini matrix** (3-4 key criteria only)
+4. **Primary pick + best-type + one fallback**
+5. **Unknowns** (single line, if applicable)
+
+Guardrail: compact mode can reduce verbosity, but MUST still keep comparison + labeled recommendation + fallback.
+
+## Public distribution compatibility (skills.sh and similar)
+
+To improve portability across skill directories and installers:
+
+1. Keep this file self-contained (frontmatter + full instructions in one SKILL.md).
+2. For public repos, prefer one of:
+   - root `SKILL.md` (maximum compatibility), or
+   - `skills/<skill-name>/SKILL.md` with clear README install path.
+3. If both root and nested SKILL.md are used, treat this file as canonical and mirror content consistently.
+4. Avoid hard-coding environment-specific local paths in core instructions.
 
 ## Verification walkthrough (spec coverage)
 
